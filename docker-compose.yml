@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  partners_db:
+    image: mysql:5.7
+    container_name: partners-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+
+  partners_api:
+    image: partners_api:latest
+    container_name: partners-api
+    build: .
+    volumes:
+      - ".:/partners-api"
+    ports:
+      - "3001:3000"
+    depends_on:
+      - partners_db
+    links:
+      - partners_db
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_HOST: ${DB_HOST}
