@@ -12,7 +12,7 @@ class PointOfSalesController < ApplicationController
   end
 
   def create
-    point_of_sale = PointOfSale.new(point_of_sale_params)
+    point_of_sale = PointOfSaleParser.from_params(point_of_sale_params)
 
     unless point_of_sale.valid?
       errors = ErrorParamMessageGenerator.generate(point_of_sale.errors)
