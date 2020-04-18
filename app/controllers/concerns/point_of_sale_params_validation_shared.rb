@@ -1,8 +1,6 @@
 module PointOfSaleParamsValidationShared
   extend ActiveSupport::Concern
 
-  VALIDATION_SEARCH_ERROR = 'lat and lng is required'
-
   included do
     private
 
@@ -13,9 +11,12 @@ module PointOfSaleParamsValidationShared
       end
 
       def validate_search_params
-        invalid_params = params[:lat].blank? || params[:lng].blank?
+        lat_blank_error = ParamError.new(:lat, ["Latitude can't be blank"]) if params[:lat].blank?
+        lng_blank_error = ParamError.new(:lng, ["Longitude can't be blank"]) if params[:lng].blank?
 
-        raise ActionController::ParameterMissing, VALIDATION_SEARCH_ERROR if invalid_params
+        errors = [lat_blank_error, lng_blank_error].compact
+
+        raise InvalidParamException.new(errors) if errors.present?
       end
   end
 end
