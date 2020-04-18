@@ -14,13 +14,12 @@ class PointOfSalesController < ApplicationController
   def create
     point_of_sale = PointOfSale.new(point_of_sale_params)
 
-    result = if point_of_sale.valid?
-      point_of_sale.save
-    else
-      ErrorParamMessageGenerator.generate(point_of_sale.errors)
+    unless point_of_sale.valid?
+      errors = ErrorParamMessageGenerator.generate(point_of_sale.errors)
+      raise InvalidParamException.new(errors)
     end
 
-    render json: result
+    render json: point_of_sale.save
   end
 
   def get
