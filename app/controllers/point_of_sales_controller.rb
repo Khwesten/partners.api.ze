@@ -17,7 +17,7 @@ class PointOfSalesController < ApplicationController
     result = if point_of_sale.valid?
       point_of_sale.save
     else
-      ErrorFieldMessageGenerator.generate(point_of_sale.errors)
+      ErrorParamMessageGenerator.generate(point_of_sale.errors)
     end
 
     render json: result
