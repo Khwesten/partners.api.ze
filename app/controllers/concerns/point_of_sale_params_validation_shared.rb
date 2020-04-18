@@ -6,7 +6,7 @@ module PointOfSaleParamsValidationShared
   included do
     private
 
-      def point_of_sales_params
+      def point_of_sale_params
         params.require(:point_of_sale).permit(
           :trading_name, :owner_name, :document, :coverage_area, :address
         )

@@ -12,9 +12,13 @@ class PointOfSalesController < ApplicationController
   end
 
   def create
-    point_of_sale = PointOfSale.new(point_of_sales_params)
+    point_of_sale = PointOfSale.new(point_of_sale_params)
 
-    result = point_of_sale.valid? ? point_of_sale.save : { errors: point_of_sale.errors.full_messages }
+    result = if point_of_sale.valid?
+      point_of_sale.save
+    else
+      ErrorFieldMessageGenerator.generate(point_of_sale.errors)
+    end
 
     render json: result
   end
