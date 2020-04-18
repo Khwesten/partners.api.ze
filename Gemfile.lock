@@ -46,6 +46,7 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.4)
     byebug (11.0.1)
+    coderay (1.1.2)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
     debug_inspector (0.0.3)
@@ -74,6 +75,9 @@ GEM
     nio4r (1.2.1)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
+    pry (0.13.1)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
     rack (2.2.2)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -142,6 +146,7 @@ DEPENDENCIES
   dotenv-rails
   jbuilder (~> 2.0)
   mysql2 (>= 0.3.13, < 0.5.0)
+  pry
   rails (= 5.0.0)
   rgeo
   rgeo-geojson
