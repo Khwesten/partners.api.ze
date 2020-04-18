@@ -15,7 +15,7 @@ RUN echo "America/Sao_Paulo" >  /etc/timezone
 RUN mkdir -p /app
 WORKDIR /app
 
-ARG bundle_options_var='--jobs 20 --retry 5'
+ARG bundle_options_var="--jobs 20 --retry 5"
 
 COPY Gemfile Gemfile.lock ./
 
