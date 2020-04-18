@@ -1,4 +1,6 @@
 class PointOfSalesController < ApplicationController
+  include PointOfSaleParamsValidationShared
+
   before_action :validate_search_params, only: :search
 
   def initialize(options = {})
@@ -14,31 +16,19 @@ class PointOfSalesController < ApplicationController
   end
 
   def get
-    id = params[:id]
+    point_of_sale = PointOfSale.find(params[:id])
 
-    render json: PointOfSale.find(params[:id])
+    render json: PointOfSaleRepresentation.build(point_of_sale)
   end
 
   def search
     longitude = params[:lng]
     latitude = params[:lat]
 
-    point = @factory.point(longitude, latitude)
+    rgeo_point = @factory.point(longitude, latitude)
 
-    render json: PointOfSale.in_area(point)
+    points_of_sale = PointOfSale.by_point(rgeo_point)
+
+    render json: points_of_sale.map { |point| PointOfSaleRepresentation.build(point) }
   end
-
-  private
-
-    def partners_params
-      params.require(:point_of_sale).permit(
-        :trading_name, :owner_name, :document, :coverage_area, :address
-      )
-    end
-
-    def validate_search_params
-      invalid_params = params[:lat].blank? || params[:lng].blank?
-
-      raise ActionController::ParameterMissing, 'lat and lng is required' if invalid_params
-    end
 end
