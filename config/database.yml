@@ -10,7 +10,7 @@
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 #
 default: &default
-  adapter: mysql2
+  adapter: mysql2rgeo
   encoding: utf8
   pool: <%= Integer(ENV.fetch("RAILS_MAX_THREADS") { 5 }) * Integer(ENV.fetch("WEB_CONCURRENCY") { 2 }) %>
   database: <%= ENV['DB_NAME'] %>
