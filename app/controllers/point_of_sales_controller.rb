@@ -16,6 +16,11 @@ class PointOfSalesController < ApplicationController
   def create
     point_of_sale = PointOfSaleParser.from_params(create_point_of_sale_params)
 
+    if point_of_sale.invalid?
+      errors = ErrorFieldMessageGenerator.generate(point_of_sale.errors)
+      raise InvalidParamException.new(errors)
+    end
+
     point_of_sale.save
 
     render json: PointOfSaleRepresentation.build(point_of_sale)
