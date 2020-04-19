@@ -31,6 +31,8 @@ group :development, :test do
   gem 'byebug'
 
   gem 'pry'
+  gem 'pry-remote'
+  gem 'pry-nav'
 end
 
 group :development do
