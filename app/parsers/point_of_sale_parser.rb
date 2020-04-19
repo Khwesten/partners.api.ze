@@ -3,7 +3,7 @@ class PointOfSaleParser
     coverage_area = params[:coverage_area].to_h
     address = params[:address].to_h
 
-    // TODO: Make validation to check decode successfully
+    # TODO: Make validation to check decode successfully
     rgeo_coverage_area = decoder.decode(coverage_area)
     rgeo_address = decoder.decode(address)
 
