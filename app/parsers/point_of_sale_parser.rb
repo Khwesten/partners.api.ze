@@ -1,7 +1,7 @@
 class PointOfSaleParser
   def self.from_params(params, decoder: RGeo::GeoJSON)
-    coverage_area = params[:coverage_area].to_h
-    address = params[:address].to_h
+    coverage_area = params[:coverage_area]
+    address = params[:address]
 
     # TODO: Make validation to check decode successfully
     rgeo_coverage_area = decoder.decode(coverage_area)
