@@ -1,4 +1,4 @@
-class ErrorParamMessageGenerator
+class ErrorFieldMessageGenerator
 
   def self.generate(active_record_errors)
     errored_field_keys = active_record_errors.keys
