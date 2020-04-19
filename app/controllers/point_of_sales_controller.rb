@@ -1,4 +1,5 @@
 class PointOfSalesController < ApplicationController
+  include PointOfSalePermittedParamsShared
   include PointOfSaleParamsValidationShared
 
   before_action :validate_search_params, only: :search
@@ -8,14 +9,15 @@ class PointOfSalesController < ApplicationController
   end
 
   def index
-    render json: { response: "partners.ze.api" }
+    render json: { response: 'partners.ze.api' }
   end
 
   def create
-    point_of_sale = PointOfSaleParser.from_params(point_of_sale_params)
+    point_of_sale = PointOfSaleParser.from_params(create_point_of_sale_params)
 
     unless point_of_sale.valid?
       errors = ErrorParamMessageGenerator.generate(point_of_sale.errors)
+
       raise InvalidParamException.new(errors)
     end
 
