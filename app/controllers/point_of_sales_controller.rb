@@ -3,6 +3,7 @@ class PointOfSalesController < ApplicationController
   include PointOfSaleParamsValidationShared
 
   before_action :validate_search_params, only: :search
+  before_action :validate_create_params, only: :create
 
   def initialize(options = {})
     @rgeo_cartesian_factory = options[:factory] || RGeo::Cartesian.preferred_factory()
@@ -15,13 +16,9 @@ class PointOfSalesController < ApplicationController
   def create
     point_of_sale = PointOfSaleParser.from_params(create_point_of_sale_params)
 
-    unless point_of_sale.valid?
-      errors = ErrorParamMessageGenerator.generate(point_of_sale.errors)
+    point_of_sale.save
 
-      raise InvalidParamException.new(errors)
-    end
-
-    render json: point_of_sale.save
+    render json: PointOfSaleRepresentation.build(point_of_sale)
   end
 
   def get
@@ -31,8 +28,8 @@ class PointOfSalesController < ApplicationController
   end
 
   def search
-    longitude = params[:lng]
-    latitude = params[:lat]
+    longitude = search_point_of_sale_params[:lng]
+    latitude = search_point_of_sale_params[:lat]
 
     rgeo_point = @rgeo_cartesian_factory.point(longitude, latitude)
 
