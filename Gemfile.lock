@@ -142,6 +142,8 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    validates_cpf_cnpj (0.2.0)
+      activemodel (>= 3.0.0)
     web-console (2.3.0)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
@@ -168,6 +170,7 @@ DEPENDENCIES
   rgeo-geojson
   sdoc (~> 0.4.0)
   spring
+  validates_cpf_cnpj
   web-console (~> 2.0)
 
 BUNDLED WITH
