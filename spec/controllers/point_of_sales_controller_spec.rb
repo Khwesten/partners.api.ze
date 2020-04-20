@@ -268,7 +268,7 @@ RSpec.describe 'PointOfSales', type: :request do
 
           expect(response).to be_bad_request
           expect(response_body['errors'].first['param']).to eq 'document'
-          expect(response_body['errors'].first['errors']).to eq 'Document is invalid'
+          expect(response_body['errors'].first['errors']).to eq ['Document is invalid']
         end
       end
 
@@ -283,7 +283,7 @@ RSpec.describe 'PointOfSales', type: :request do
 
           expect(response).to be_bad_request
           expect(response_body['errors'].first['param']).to eq 'address'
-          expect(response_body['errors'].first['errors']).to eq 'Address must be a RGeo::Point'
+          expect(response_body['errors'].first['errors']).to eq ['Address must be a RGeo::Point']
         end
       end
 
@@ -298,7 +298,7 @@ RSpec.describe 'PointOfSales', type: :request do
 
           expect(response).to be_bad_request
           expect(response_body['errors'].first['param']).to eq 'coverage_area'
-          expect(response_body['errors'].first['errors']).to eq 'Coverage area must be a RGeo::MultiPolygon'
+          expect(response_body['errors'].first['errors']).to eq ['Coverage area must be a RGeo::MultiPolygon']
         end
       end
     end
