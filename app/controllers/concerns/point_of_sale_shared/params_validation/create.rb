@@ -25,7 +25,7 @@ module PointOfSaleShared::ParamsValidation::Create
           end
         end.compact
 
-        raise InvalidParamException.new(errors) if errors.present?
+        raise InvalidParamError.new(errors) if errors.present?
       end
 
       def validate_create_rgeo_format_params(params, decoder: RGeo::GeoJSON)
@@ -42,7 +42,7 @@ module PointOfSaleShared::ParamsValidation::Create
           end
         end.compact
 
-        raise InvalidParamException.new(errors) if errors.present?
+        raise InvalidParamError.new(errors) if errors.present?
       end
   end
 end

@@ -18,7 +18,7 @@ module PointOfSaleShared::ParamsValidation::Search
 
         errors = [lat_blank_error, lng_blank_error].compact
 
-        raise InvalidParamException.new(errors) if errors.present?
+        raise InvalidParamError.new(errors) if errors.present?
       end
   end
 end

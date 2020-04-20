@@ -1,4 +1,4 @@
-class InvalidParamException < StandardError
+class InvalidParamError < StandardError
   attr_reader :errors
 
   def initialize(errors)
