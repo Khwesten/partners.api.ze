@@ -20,22 +20,18 @@ FactoryBot.define do
     }
 
     trait :geo_as_hash do
-      coverage_area {
-        {
-          type: 'MultiPolygon',
-          coordinates: [
-            [[[10, 10], [45, 40], [10, 40], [10, 10]]],
-            [[[15, 5], [40, 10], [10, 20], [5, 10], [15, 5]]]
-          ]
-        }
-      }
+      after(:build) do |point_of_sale|
+        point_of_sale.coverage_area = RGeo::GeoJSON.encode(point_of_sale.coverage_area).to_h
+        point_of_sale.address = RGeo::GeoJSON.encode(point_of_sale.address).to_h
+      end
+    end
 
-      address {
-        {
-          type: 'Point',
-          coordinates: [-46.57421, -21.785741]
-        }
-      }
+    trait :invalid_rgeo_address do
+      address { self.coverage_area }
+    end
+
+    trait :invalid_rgeo_coverage_area do
+      coverage_area { self.address }
     end
   end
 end
