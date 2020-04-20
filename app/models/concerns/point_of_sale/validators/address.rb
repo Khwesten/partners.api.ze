@@ -1,5 +1,5 @@
-module Validators
-  class AddressValidator < ActiveModel::Validator
+module PointOfSale::Validators
+  class Address < ActiveModel::Validator
     MUST_BE_POINT = 'must be a RGeo::Point'
 
     def validate(record)

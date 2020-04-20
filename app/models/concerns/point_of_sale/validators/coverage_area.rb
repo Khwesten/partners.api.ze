@@ -1,5 +1,5 @@
-module Validators
-  class CoverageAreaValidator < ActiveModel::Validator
+module PointOfSale::Validators
+  class CoverageArea < ActiveModel::Validator
     MUST_BE_MULTIPOLYGON = 'must be a RGeo::MultiPolygon'
 
     def validate(record)
