@@ -259,14 +259,14 @@ RSpec.describe 'PointOfSales', type: :request do
         end
 
         context 'body' do
-          include_examples 'all params is missing', nil
+          it_behaves_like  'all params is missing', nil
         end
       end
 
       context "params don't match with point_of_sale params" do
         params = { dont_match_param: 'dont_match_value' }.to_json
 
-        include_examples 'all params is missing', params
+        it_behaves_like 'all params is missing', params
       end
     end
 
