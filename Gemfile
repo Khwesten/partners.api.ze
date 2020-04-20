@@ -35,6 +35,10 @@ group :development, :test do
   gem 'pry'
   gem 'pry-remote'
   gem 'pry-nav'
+
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :development do
@@ -46,4 +50,3 @@ group :development do
 
   gem 'dotenv-rails'
 end
-
