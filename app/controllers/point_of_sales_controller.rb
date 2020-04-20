@@ -18,7 +18,7 @@ class PointOfSalesController < ApplicationController
 
     if point_of_sale.invalid?
       errors = ErrorFieldMessageGenerator.generate(point_of_sale.errors)
-      raise InvalidParamException.new(errors)
+      raise InvalidParamError.new(errors)
     end
 
     point_of_sale.save

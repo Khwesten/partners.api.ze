@@ -21,7 +21,7 @@ module PointOfSaleParamsValidationShared
 
         errors = [lat_blank_error, lng_blank_error].compact
 
-        raise InvalidParamException.new(errors) if errors.present?
+        raise InvalidParamError.new(errors) if errors.present?
       end
 
       def validate_create_params
@@ -39,7 +39,7 @@ module PointOfSaleParamsValidationShared
           ParamError.new(key, "#{key.to_s.humanize} #{CANT_BE_BLANK}") if value.blank?
         end.compact
 
-        raise InvalidParamException.new(errors) if errors.present?
+        raise InvalidParamError.new(errors) if errors.present?
       end
 
       def validate_rgeo_format_params(params, decoder: RGeo::GeoJSON)
@@ -56,7 +56,7 @@ module PointOfSaleParamsValidationShared
           end
         end.compact
 
-        raise InvalidParamException.new(errors) if errors.present?
+        raise InvalidParamError.new(errors) if errors.present?
       end
   end
 end

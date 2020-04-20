@@ -4,7 +4,7 @@ module ExceptionHandlerShared
   RESOURCE_DOES_NOT_EXIST = 'resource does not exists'
 
   included do
-    rescue_from InvalidParamException, with: :invalid_param_exception_handler
+    rescue_from InvalidParamError, with: :invalid_param_exception_handler
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found_exception_handler
 
     protected
