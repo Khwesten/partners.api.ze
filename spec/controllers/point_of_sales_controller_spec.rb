@@ -134,6 +134,7 @@ RSpec.describe 'PointOfSales', type: :request do
           post '/pos', params: params, headers: CONTENT_TYPE_JSON_HEADER
 
           response_body = JSON.parse(response.body)
+
           document_error = response_body['errors'].select  { |error| error['param'] == 'document' }.first
           address_area_error = response_body['errors'].select  { |error| error['param'] == 'address' }.first
           owner_name_error = response_body['errors'].select  { |error| error['param'] == 'owner_name' }.first
@@ -142,16 +143,21 @@ RSpec.describe 'PointOfSales', type: :request do
 
           expect(response).to be_bad_request
           expect(response_body['errors'].size).to eq 5
+          expect(document_error['errors'].one?)
           expect(document_error['param']).to eq 'document'
-          expect(document_error['errors']).to eq "Document can't be blank"
+          expect(document_error['errors'].first).to eq "Document can't be blank"
+          expect(address_area_error['errors'].one?)
           expect(address_area_error['param']).to eq 'address'
-          expect(address_area_error['errors']).to eq "Address can't be blank"
+          expect(address_area_error['errors'].first).to eq "Address can't be blank"
+          expect(owner_name_error['errors'].one?)
           expect(owner_name_error['param']).to eq 'owner_name'
-          expect(owner_name_error['errors']).to eq "Owner name can't be blank"
+          expect(owner_name_error['errors'].first).to eq "Owner name can't be blank"
+          expect(trading_name_error['errors'].one?)
           expect(trading_name_error['param']).to eq 'trading_name'
-          expect(trading_name_error['errors']).to eq "Trading name can't be blank"
+          expect(trading_name_error['errors'].first).to eq "Trading name can't be blank"
+          expect(coverage_area_error['errors'].one?)
           expect(coverage_area_error['param']).to eq 'coverage_area'
-          expect(coverage_area_error['errors']).to eq "Coverage area can't be blank"
+          expect(coverage_area_error['errors'].first).to eq "Coverage area can't be blank"
         end
       end
 
@@ -165,8 +171,9 @@ RSpec.describe 'PointOfSales', type: :request do
             response_body = JSON.parse(response.body)
 
             expect(response).to be_bad_request
+            expect(response_body['errors'].first['errors'].one?)
             expect(response_body['errors'].first['param']).to eq 'document'
-            expect(response_body['errors'].first['errors']).to eq "Document can't be blank"
+            expect(response_body['errors'].first['errors'].first).to eq "Document can't be blank"
           end
         end
 
@@ -179,8 +186,9 @@ RSpec.describe 'PointOfSales', type: :request do
             response_body = JSON.parse(response.body)
 
             expect(response).to be_bad_request
+            expect(response_body['errors'].first['errors'].one?)
             expect(response_body['errors'].first['param']).to eq 'trading_name'
-            expect(response_body['errors'].first['errors']).to eq "Trading name can't be blank"
+            expect(response_body['errors'].first['errors'].first).to eq "Trading name can't be blank"
           end
         end
 
@@ -193,8 +201,9 @@ RSpec.describe 'PointOfSales', type: :request do
             response_body = JSON.parse(response.body)
 
             expect(response).to be_bad_request
+            expect(response_body['errors'].first['errors'].one?)
             expect(response_body['errors'].first['param']).to eq 'owner_name'
-            expect(response_body['errors'].first['errors']).to eq "Owner name can't be blank"
+            expect(response_body['errors'].first['errors'].first).to eq "Owner name can't be blank"
           end
         end
 
@@ -207,8 +216,9 @@ RSpec.describe 'PointOfSales', type: :request do
             response_body = JSON.parse(response.body)
 
             expect(response).to be_bad_request
+            expect(response_body['errors'].first['errors'].one?)
             expect(response_body['errors'].first['param']).to eq 'address'
-            expect(response_body['errors'].first['errors']).to eq "Address can't be blank"
+            expect(response_body['errors'].first['errors'].first).to eq "Address can't be blank"
           end
         end
 
@@ -221,8 +231,9 @@ RSpec.describe 'PointOfSales', type: :request do
             response_body = JSON.parse(response.body)
 
             expect(response).to be_bad_request
+            expect(response_body['errors'].first['errors'].one?)
             expect(response_body['errors'].first['param']).to eq 'coverage_area'
-            expect(response_body['errors'].first['errors']).to eq "Coverage area can't be blank"
+            expect(response_body['errors'].first['errors'].first).to eq "Coverage area can't be blank"
           end
         end
 
@@ -238,10 +249,12 @@ RSpec.describe 'PointOfSales', type: :request do
 
             expect(response).to be_bad_request
             expect(response_body['errors'].size).to eq 2
+            expect(coverage_area_error['errors'].one?)
             expect(coverage_area_error['param']).to eq 'coverage_area'
-            expect(coverage_area_error['errors']).to eq "Coverage area can't be blank"
+            expect(coverage_area_error['errors'].first).to eq "Coverage area can't be blank"
+            expect(address_area_error['errors'].one?)
             expect(address_area_error['param']).to eq 'address'
-            expect(address_area_error['errors']).to eq "Address can't be blank"
+            expect(address_area_error['errors'].first).to eq "Address can't be blank"
           end
         end
 
@@ -267,8 +280,9 @@ RSpec.describe 'PointOfSales', type: :request do
           response_body = JSON.parse(response.body)
 
           expect(response).to be_bad_request
+          expect(response_body['errors'].first['errors'].one?)
           expect(response_body['errors'].first['param']).to eq 'document'
-          expect(response_body['errors'].first['errors']).to eq ['Document is invalid']
+          expect(response_body['errors'].first['errors'].first).to eq 'Document is invalid'
         end
       end
 
@@ -282,8 +296,9 @@ RSpec.describe 'PointOfSales', type: :request do
           response_body = JSON.parse(response.body)
 
           expect(response).to be_bad_request
+          expect(response_body['errors'].first['errors'].one?)
           expect(response_body['errors'].first['param']).to eq 'address'
-          expect(response_body['errors'].first['errors']).to eq ['Address must be a RGeo::Point']
+          expect(response_body['errors'].first['errors'].first).to eq 'Address must be a RGeo::Point'
         end
       end
 
@@ -297,8 +312,9 @@ RSpec.describe 'PointOfSales', type: :request do
           response_body = JSON.parse(response.body)
 
           expect(response).to be_bad_request
+          expect(response_body['errors'].first['errors'].one?)
           expect(response_body['errors'].first['param']).to eq 'coverage_area'
-          expect(response_body['errors'].first['errors']).to eq ['Coverage area must be a RGeo::MultiPolygon']
+          expect(response_body['errors'].first['errors'].first).to eq 'Coverage area must be a RGeo::MultiPolygon'
         end
       end
     end
