@@ -10,14 +10,12 @@ module PointOfSalePermittedParamsShared
     private
 
       def create_point_of_sale_params
-        params.require(:point_of_sale).permit(CREATE_PERMITTED_PARAMS).tap do |whitelisted|
-          if params.dig(:point_of_sale, :coverage_area, :coordinates)
-            whitelisted[:coverage_area][:coordinates] = params[:point_of_sale][:coverage_area][:coordinates]
+        params.permit(CREATE_PERMITTED_PARAMS).tap do |whitelisted|
+          if params.dig(:coverage_area, :coordinates)
+            whitelisted[:coverage_area][:coordinates] = params[:coverage_area][:coordinates]
           end
 
-          if params.dig(:point_of_sale, :address, :coordinates)
-            whitelisted[:address][:coordinates] = params[:point_of_sale][:address][:coordinates]
-          end
+          whitelisted[:address][:coordinates] = params[:address][:coordinates] if params.dig(:address, :coordinates)
         end.to_h
       end
 
