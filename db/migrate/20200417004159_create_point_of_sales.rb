@@ -1,4 +1,4 @@
-class CreatePointOfSales < ActiveRecord::Migration
+class CreatePointOfSales < ActiveRecord::Migration[5.2]
   def change
     create_table :point_of_sales do |t|
       t.string :trading_name, null: false
