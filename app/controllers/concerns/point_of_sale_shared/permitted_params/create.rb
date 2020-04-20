@@ -1,4 +1,4 @@
-module PointOfSalePermittedParamsShared
+module PointOfSaleShared::PermittedParams::Create
   extend ActiveSupport::Concern
 
   RGEO_PERMITTED_PARAMS = [:type, coordinates: []]
@@ -17,10 +17,6 @@ module PointOfSalePermittedParamsShared
 
           whitelisted[:address][:coordinates] = params[:address][:coordinates] if params.dig(:address, :coordinates)
         end.to_h
-      end
-
-      def search_point_of_sale_params
-        params.permit(:lat, :lng).to_h
       end
   end
 end
