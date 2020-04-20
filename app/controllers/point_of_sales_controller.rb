@@ -1,6 +1,6 @@
 class PointOfSalesController < ApplicationController
-  include PointOfSalePermittedParamsShared
-  include PointOfSaleParamsValidationShared
+  include PointOfSaleShared::PermittedParams
+  include PointOfSaleShared::ParamsValidation
 
   before_action :validate_search_params, only: :search
   before_action :validate_create_params, only: :create
