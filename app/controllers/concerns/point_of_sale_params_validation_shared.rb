@@ -12,11 +12,11 @@ module PointOfSaleParamsValidationShared
 
       def validate_search_params
         lat_blank_error = if search_point_of_sale_params[:lat].blank?
-          ParamError.new(:lat, [LATITUDE_CANT_BLANK_MESSAGE])
+          ParamError.new(:lat, LATITUDE_CANT_BLANK_MESSAGE)
         end
 
         lng_blank_error = if search_point_of_sale_params[:lng].blank?
-          ParamError.new(:lng, [LONGITUDE_CANT_BLANK_MESSAGE])
+          ParamError.new(:lng, LONGITUDE_CANT_BLANK_MESSAGE)
         end
 
         errors = [lat_blank_error, lng_blank_error].compact
@@ -43,18 +43,18 @@ module PointOfSaleParamsValidationShared
       end
 
       def validate_rgeo_format_params(params, decoder: RGeo::GeoJSON)
-        address = params[:address]
-        coverage_area = params[:coverage_area]
+        rgeo_params = {
+          address: params[:address],
+          coverage_area: params[:coverage_area]
+        }
 
-        coverage_area_error = unless decoder.decode(coverage_area)
-          ParamError.new(:coverage_area, "#{:coverage_area.to_s.humanize} #{MUST_BE_A_VALID_GEOJSON}")
-        end
+        errors = rgeo_params.map do |key, value|
+          unless decoder.decode(value)
+            error_message = "#{key.to_s.humanize} #{MUST_BE_A_VALID_GEOJSON}"
 
-        address_error = unless decoder.decode(address)
-          ParamError.new(:coverage_area, "#{:coverage_area.to_s.humanize} #{MUST_BE_A_VALID_GEOJSON}")
-        end
-
-        errors = [address_error, coverage_area_error].compact
+            ParamError.new(key, error_message)
+          end
+        end.compact
 
         raise InvalidParamException.new(errors) if errors.present?
       end
