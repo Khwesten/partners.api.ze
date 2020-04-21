@@ -59,6 +59,8 @@ To know shortcuts to navigate on debugging look at: `pry-nav` [gem](https://gith
 
 ## How to scale?
 
+Make `search` paginated to avoid retrieve a lot of results on same request
+
 Before try changes the database to a better spatial database, we need try some approaches to improve, if we have big polygons we can try:
   - Simplification our polygons (*to reduce points/sides therefore reducind slow queries*)
   - Segmentation our polygons(*breaking large polygons we can reduce slow queries*)
