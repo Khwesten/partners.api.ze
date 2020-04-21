@@ -29,6 +29,24 @@ This application allow us to:
 
 ## Running
 
+You will need set these env vars or use a `.env`:
+
+    # Application
+    DB_NAME
+    DB_USER
+    DB_PASS
+    DB_HOST=partners_db
+
+**Keep `DB_HOST` as above. This is the docker service name*
+
+    # MySQL
+    MYSQL_ROOT_PASSWORD
+    MYSQL_DATABASE
+    MYSQL_USER
+    MYSQL_PASSWORD
+
+**Keep `MYSQL_DATABASE` as the same of `DB_NAME`*
+
 Build docker images:
 
     docker-compose build
