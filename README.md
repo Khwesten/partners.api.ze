@@ -57,6 +57,10 @@ Running application on background(`-d`)
 
 The **application** will running on port `3001` and **database** on `3307`
 
+#### Interact
+
+To see how interact with **api**, acces `localhost:3001/docs`, we have a **swagger UI** with data structure documented.
+
 ## Debugging
 
 To debugging some piece of code, use `binding.pry` as a break point. To debugging we need attach to our docker

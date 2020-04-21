@@ -1,0 +1,198 @@
+swagger: "2.0"
+info:
+  description: "This is a server PointOfSale server."
+  version: "1.0.0"
+  title: "Swagger PointOfSale"
+  contact:
+    email: "k-heiner@hotmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3001"
+basePath: "/"
+tags:
+- name: "Point of sale"
+  description: "Operations about point of sale"
+schemes:
+- "http"
+paths:
+  /pos:
+    post:
+      tags:
+      - "Point of sale"
+      summary: "Create point of sale"
+      operationId: "create point of sale"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "point_of_sale"
+        description: "Created point of sale object"
+        required: true
+        schema:
+          $ref: "#/definitions/PointOfSaleEntry"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PointOfSaleOutput"
+        400:
+          description: "invalid parameters"
+          schema:
+            $ref: "#/definitions/InvalidParamError"
+
+    get:
+      tags:
+      - "Point of sale"
+      summary: "Get point of sales by latitude and longitude"
+      description: "Get point of sales that have geolocation within from coverage area"
+      operationId: "search"
+      produces:
+      - "application/json"
+      parameters:
+        - in: query
+          name: lat
+          type: integer
+          description: Latitude
+        - in: query
+          name: lng
+          type: integer
+          description: Longitude
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/PointOfSaleOutput"
+
+  /pos/{id}:
+    get:
+      tags:
+      - "Point of sale"
+      summary: "Get point of sale by id"
+      description: ""
+      operationId: "get"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PointOfSaleOutput"
+        404:
+          description: 'not found'
+          schema:
+            type: object
+            properties:
+              errors:
+                type: string
+
+definitions:
+  PointOfSaleEntry:
+    type: "object"
+    properties:
+      document:
+        type: "string"
+        description: "a valid cnpj"
+      owner_name:
+        type: "string"
+      trading_name:
+        type: "string"
+      address:
+        $ref: "#/definitions/Point"
+      coverage_area:
+        $ref: '#/definitions/MultiPolygon'
+
+  PointOfSaleOutput:
+    type: "object"
+    properties:
+      document:
+        type: "string"
+        description: "a valid cnpj"
+      owner_name:
+        type: "string"
+      trading_name:
+        type: "string"
+      address:
+        $ref: "#/definitions/Point"
+      coverage_area:
+        $ref: '#/definitions/MultiPolygon'
+
+  InvalidParamError:
+    type: "object"
+    properties:
+      errors:
+        description: "params errors"
+        $ref: '#/definitions/ParamError'
+
+  ParamError:
+    type: "object"
+    properties:
+      param:
+        type: string
+      errors:
+        type: array
+        items:
+          type: string
+
+  Geometry:
+    type: object
+    description: GeoJSon geometry
+    discriminator: type
+    required:
+      - type
+    externalDocs:
+      url: http://geojson.org/geojson-spec.html#geometry-objects
+    properties:
+      type:
+        type: string
+        enum:
+        - Point
+        - LineString
+        - Polygon
+        - MultiPoint
+        - MultiLineString
+        - MultiPolygon
+        description: the geometry type
+
+  Point:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: http://geojson.org/geojson-spec.html#id2
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            maxItems: 2
+            minItems: 2
+            items:
+              type: number
+
+  MultiPolygon:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: http://geojson.org/geojson-spec.html#id6
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                items:
+                  type: array
+                  maxItems: 2
+                  minItems: 2
+                  items:
+                    type: number
