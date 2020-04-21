@@ -7,7 +7,7 @@ RSpec.describe 'PointOfSales', type: :request do
         document = Faker::Company.brazilian_company_number
         point_of_sale = create(:point_of_sale, document: document)
 
-        get "/pos/#{point_of_sale.id}"
+        get "/point-of-sale/#{point_of_sale.id}"
 
         response_body = JSON.parse(response.body)
 
@@ -20,7 +20,7 @@ RSpec.describe 'PointOfSales', type: :request do
       end
 
       it 'no exist on database' do
-        get '/pos/0'
+        get '/point-of-sale/0'
 
         expect(response).to be_not_found
       end
@@ -28,7 +28,7 @@ RSpec.describe 'PointOfSales', type: :request do
 
     context 'when receive a invalid id' do
       it do
-        get '/pos/abc123'
+        get '/point-of-sale/abc123'
 
         expect(response).to be_not_found
       end
@@ -40,7 +40,7 @@ RSpec.describe 'PointOfSales', type: :request do
       it 'exist on database' do
         point_of_sale = create(:point_of_sale)
 
-        get '/pos?lat=11&lng=11'
+        get '/point-of-sale?lat=11&lng=11'
 
         response_body = JSON.parse(response.body).first
 
@@ -53,7 +53,7 @@ RSpec.describe 'PointOfSales', type: :request do
       end
 
       it 'no exist on database' do
-        get '/pos?lat=0&lng=0'
+        get '/point-of-sale?lat=0&lng=0'
 
         response_body = JSON.parse(response.body)
 
@@ -65,7 +65,7 @@ RSpec.describe 'PointOfSales', type: :request do
     context 'when receive' do
       RSpec.shared_examples 'bad search request' do |param|
         it do
-          get "/pos#{param}"
+          get "/point-of-sale#{param}"
 
           expect(response).to be_bad_request
         end
@@ -76,7 +76,7 @@ RSpec.describe 'PointOfSales', type: :request do
       context 'lng without lat' do it_behaves_like 'bad search request', '?lng=abc' end
 
       it 'lat and lng' do
-        get '/pos?lat=abc&lng=abc'
+        get '/point-of-sale?lat=abc&lng=abc'
 
         response_body = JSON.parse(response.body)
 
@@ -100,7 +100,7 @@ RSpec.describe 'PointOfSales', type: :request do
       it do
         point_of_sale = build(:point_of_sale, :geo_as_hash)
 
-        post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
+        post '/point-of-sale', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
 
         response_body = JSON.parse(response.body)
 
@@ -116,7 +116,7 @@ RSpec.describe 'PointOfSales', type: :request do
     context 'when receive' do
       RSpec.shared_examples 'all params is missing' do |params|
         it do
-          post '/pos', params: params, headers: CONTENT_TYPE_JSON_HEADER
+          post '/point-of-sale', params: params, headers: CONTENT_TYPE_JSON_HEADER
 
           response_body = JSON.parse(response.body)
 
@@ -148,7 +148,7 @@ RSpec.describe 'PointOfSales', type: :request do
 
       RSpec.shared_examples 'bad create request with param and error' do |param, error|
         it do
-          post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
+          post '/point-of-sale', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
 
           response_body = JSON.parse(response.body)
 
@@ -194,7 +194,7 @@ RSpec.describe 'PointOfSales', type: :request do
           it do
             point_of_sale = build(:point_of_sale, :geo_as_hash, coverage_area: '', address: '')
 
-            post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
+            post '/point-of-sale', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
 
             response_body = JSON.parse(response.body)
             address_area_error = response_body['errors'].select  { |error| error['param'] == 'address' }.first

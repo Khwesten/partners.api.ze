@@ -16,7 +16,7 @@ tags:
 schemes:
 - "http"
 paths:
-  /pos:
+  /point-of-sale:
     post:
       tags:
       - "Point of sale"
@@ -65,7 +65,7 @@ paths:
             items:
               $ref: "#/definitions/PointOfSaleOutput"
 
-  /pos/{id}:
+  /point-of-sale/{id}:
     get:
       tags:
       - "Point of sale"
