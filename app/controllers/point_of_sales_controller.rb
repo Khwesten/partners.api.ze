@@ -23,13 +23,13 @@ class PointOfSalesController < ApplicationController
 
     point_of_sale.save
 
-    render json: PointOfSaleRepresentation.build(point_of_sale)
+    render json: PointOfSale::Representations::Default.build(point_of_sale)
   end
 
   def get
     point_of_sale = PointOfSale.find(params[:id])
 
-    render json: PointOfSaleRepresentation.build(point_of_sale)
+    render json: PointOfSale::Representations::Default.build(point_of_sale)
   end
 
   def search
@@ -40,6 +40,6 @@ class PointOfSalesController < ApplicationController
 
     points_of_sale = PointOfSale.by_rgeo_point(rgeo_point)
 
-    render json: points_of_sale.map { |point_of_sale| PointOfSaleRepresentation.build(point_of_sale) }
+    render json: points_of_sale.map { |point_of_sale| PointOfSale::Representations::Default.build(point_of_sale) }
   end
 end
