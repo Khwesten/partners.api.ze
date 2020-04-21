@@ -62,18 +62,18 @@ RSpec.describe 'PointOfSales', type: :request do
       end
     end
 
-    context 'when receive invalid param' do
-      it 'lat without lng' do
-        get '/pos?lat=abc'
+    context 'when receive' do
+      RSpec.shared_examples 'bad search request' do |param|
+        it do
+          get "/pos#{param}"
 
-        expect(response).to be_bad_request
+          expect(response).to be_bad_request
+        end
       end
 
-      it 'lng without lat' do
-        get '/pos?lng=abc'
+      context 'valid lat without lng' do it_behaves_like 'bad search request', '?lat=abc' end
 
-        expect(response).to be_bad_request
-      end
+      context 'lng without lat' do it_behaves_like 'bad search request', '?lng=abc' end
 
       it 'lat and lng' do
         get '/pos?lat=abc&lng=abc'
@@ -86,26 +86,11 @@ RSpec.describe 'PointOfSales', type: :request do
     end
 
     context 'when not receive some param' do
-      it 'lat' do
-        get '/pos?lat=10'
-
-        expect(response).to be_bad_request
-      end
-
-      it 'lng' do
-        get '/pos?lng=10'
-
-        expect(response).to be_bad_request
-      end
+      context 'with lat and without lng' do it_behaves_like 'bad search request', '?lat=10' end
+      context 'with lng and without lat' do it_behaves_like 'bad search request', '?lng=10' end
     end
 
-    context 'when not receive params' do
-      it 'without' do
-        get '/pos'
-
-        expect(response).to be_bad_request
-      end
-    end
+    context 'when not receive params' do it_behaves_like 'bad search request', '' end
   end
 
   describe '.create' do
@@ -161,79 +146,47 @@ RSpec.describe 'PointOfSales', type: :request do
         end
       end
 
+      RSpec.shared_examples 'bad create request with param and error' do |param, error|
+        it do
+          post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
+
+          response_body = JSON.parse(response.body)
+
+          expect(response).to be_bad_request
+          expect(response_body['errors'].first['errors'].one?)
+          expect(response_body['errors'].first['param']).to eq param
+          expect(response_body['errors'].first['errors'].first).to eq error
+        end
+      end
+
       context 'empty' do
         context 'document param' do
-          it do
-            point_of_sale = build(:point_of_sale, :geo_as_hash, document: '')
-
-            post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-            response_body = JSON.parse(response.body)
-
-            expect(response).to be_bad_request
-            expect(response_body['errors'].first['errors'].one?)
-            expect(response_body['errors'].first['param']).to eq 'document'
-            expect(response_body['errors'].first['errors'].first).to eq "Document can't be blank"
+          it_behaves_like 'bad create request with param and error', 'document', "Document can't be blank" do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash, document: '') }
           end
         end
 
         context 'trading_name param' do
-          it do
-            point_of_sale = build(:point_of_sale, :geo_as_hash, trading_name: '')
-
-            post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-            response_body = JSON.parse(response.body)
-
-            expect(response).to be_bad_request
-            expect(response_body['errors'].first['errors'].one?)
-            expect(response_body['errors'].first['param']).to eq 'trading_name'
-            expect(response_body['errors'].first['errors'].first).to eq "Trading name can't be blank"
+          it_behaves_like 'bad create request with param and error', 'trading_name', "Trading name can't be blank" do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash,  trading_name: '') }
           end
         end
 
         context 'owner_name param' do
-          it do
-            point_of_sale = build(:point_of_sale, :geo_as_hash, owner_name: '')
-
-            post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-            response_body = JSON.parse(response.body)
-
-            expect(response).to be_bad_request
-            expect(response_body['errors'].first['errors'].one?)
-            expect(response_body['errors'].first['param']).to eq 'owner_name'
-            expect(response_body['errors'].first['errors'].first).to eq "Owner name can't be blank"
+          it_behaves_like 'bad create request with param and error', 'owner_name', "Owner name can't be blank" do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash,  owner_name: '') }
           end
         end
 
         context 'address param' do
-          it do
-            point_of_sale = build(:point_of_sale, :geo_as_hash, address: '')
-
-            post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-            response_body = JSON.parse(response.body)
-
-            expect(response).to be_bad_request
-            expect(response_body['errors'].first['errors'].one?)
-            expect(response_body['errors'].first['param']).to eq 'address'
-            expect(response_body['errors'].first['errors'].first).to eq "Address can't be blank"
+          it_behaves_like 'bad create request with param and error', 'address', "Address can't be blank" do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash,  address: '') }
           end
         end
 
         context 'coverage_area param' do
-          it do
-            point_of_sale = build(:point_of_sale, :geo_as_hash, coverage_area: '')
-
-            post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-            response_body = JSON.parse(response.body)
-
-            expect(response).to be_bad_request
-            expect(response_body['errors'].first['errors'].one?)
-            expect(response_body['errors'].first['param']).to eq 'coverage_area'
-            expect(response_body['errors'].first['errors'].first).to eq "Coverage area can't be blank"
+          it_behaves_like 'bad create request with param and error', 'coverage_area', "Coverage area can't be blank" do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash,  coverage_area: '') }
           end
         end
 
@@ -259,7 +212,7 @@ RSpec.describe 'PointOfSales', type: :request do
         end
 
         context 'body' do
-          it_behaves_like  'all params is missing', nil
+          it_behaves_like 'all params is missing', nil
         end
       end
 
@@ -268,53 +221,26 @@ RSpec.describe 'PointOfSales', type: :request do
 
         it_behaves_like 'all params is missing', params
       end
-    end
 
-    context 'when receive a invalid' do
-      context 'document param' do
-        it do
-          point_of_sale = build(:point_of_sale, :geo_as_hash, document: '1234567890')
-
-          post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-          response_body = JSON.parse(response.body)
-
-          expect(response).to be_bad_request
-          expect(response_body['errors'].first['errors'].one?)
-          expect(response_body['errors'].first['param']).to eq 'document'
-          expect(response_body['errors'].first['errors'].first).to eq 'Document is invalid'
+      context 'invalid' do
+        context 'document param' do
+          it_behaves_like 'bad create request with param and error', 'document', 'Document is invalid' do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash, document: '1234567890') }
+          end
         end
-      end
 
-      context 'address param' do
-        it do
-          point_of_sale = build(:point_of_sale, :geo_as_hash)
-          point_of_sale.address = point_of_sale.coverage_area
-
-          post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-          response_body = JSON.parse(response.body)
-
-          expect(response).to be_bad_request
-          expect(response_body['errors'].first['errors'].one?)
-          expect(response_body['errors'].first['param']).to eq 'address'
-          expect(response_body['errors'].first['errors'].first).to eq 'Address must be a RGeo::Point'
+        context 'address param' do
+          it_behaves_like 'bad create request with param and error', 'address', 'Address must be a RGeo::Point' do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash, :invalid_rgeo_address) }
+          end
         end
-      end
 
-      context 'coverage_area param' do
-        it do
-          point_of_sale = build(:point_of_sale, :geo_as_hash)
-          point_of_sale.coverage_area = point_of_sale.address
-
-          post '/pos', params: point_of_sale.to_json, headers: CONTENT_TYPE_JSON_HEADER
-
-          response_body = JSON.parse(response.body)
-
-          expect(response).to be_bad_request
-          expect(response_body['errors'].first['errors'].one?)
-          expect(response_body['errors'].first['param']).to eq 'coverage_area'
-          expect(response_body['errors'].first['errors'].first).to eq 'Coverage area must be a RGeo::MultiPolygon'
+        context 'coverage_area param' do
+          it_behaves_like(
+            'bad create request with param and error', 'coverage_area', 'Coverage area must be a RGeo::MultiPolygon'
+              ) do
+            let(:point_of_sale) { build(:point_of_sale, :geo_as_hash, :invalid_rgeo_coverage_area) }
+          end
         end
       end
     end
