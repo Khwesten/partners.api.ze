@@ -12,5 +12,4 @@ bundle exec rake db:create
 echo ">>> Migrating..."
 bundle exec rake db:migrate
 
-# Then exec the container's main process (CMD).
 exec "$@"
