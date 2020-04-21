@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  mount GrapeSwaggerRails::Engine => '/swagger'
   root 'point_of_sales#index'
 
   get '/pos/:id', to: 'point_of_sales#get'
